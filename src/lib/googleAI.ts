@@ -174,7 +174,7 @@ export const findSemanticMatch = async (
       console.log('✅ Found match using embedding similarity');
       return {
         match: bestMatch.item,
-        score: Math.max(bestMatch.score, 0.7), // Boost confidence
+        score: Math.max(bestMatch.score, 0.7),
       };
     }
 
@@ -239,7 +239,7 @@ Return ONLY valid JSON:
       return bestMatch ? { match: bestMatch.item, score: 0.75 } : null;
     }
 
-    const result = JSON.parse(jsonMatch[0]);
+    const result = JSON.parse(jsonMatch[0]) as any;
     const selectedIdiom = targetIdioms[result.selectedIndex - 1];
 
     if (!selectedIdiom) {
@@ -248,7 +248,7 @@ Return ONLY valid JSON:
 
     return {
       match: selectedIdiom,
-      score: result.confidence || 0.85,
+      score: Math.min(result.confidence || 0.8, 1.0),
     };
   } catch (error) {
     console.error('Semantic match error:', error);
